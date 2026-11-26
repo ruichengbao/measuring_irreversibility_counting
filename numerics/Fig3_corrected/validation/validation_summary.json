@@ -1,0 +1,18 @@
+{
+  "production_runs": 240,
+  "exact_single_particle_cases": 30,
+  "validation_runs": 6,
+  "independent_realizations_per_point": 5,
+  "parameter_points": 54,
+  "production_dt": 0.0002,
+  "validation_dt": 5e-05,
+  "timestep_cases": 4,
+  "max_abs_true_EP_step_change_fraction": 0.0131206184224976,
+  "max_abs_bound_step_change_fraction": 0.0209173706388505,
+  "max_true_EP_step_difference_in_combined_SE": 1.255972312361881,
+  "max_bound_step_difference_in_combined_SE": 1.3208495949095462,
+  "max_linear_score_reconstruction_error": 1.4210854715202004e-14,
+  "zero_field_controls": "Both N=20 and N=100 have identically zero work.",
+  "quadrature_checks": "See adaptive_hist_validation.json and positive_kernel_requested_validation.json; tested grid-doubling changes below 0.11%.",
+  "interpretation": "Step differences are compared at the same fixed learned variational function. Sampling errors are conditional trajectory errors. Figure error bars are descriptive SD across five particle realizations."
+}

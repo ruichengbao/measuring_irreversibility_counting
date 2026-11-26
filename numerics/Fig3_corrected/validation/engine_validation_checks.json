@@ -1,0 +1,78 @@
+{
+  "runs_checked": 6,
+  "all_invariants_passed": true,
+  "records": [
+    {
+      "run": "N020_E0.0_r0_meta",
+      "N": 20,
+      "E": 0,
+      "dt": 0.0002,
+      "periods": 160,
+      "acceptance": 0.908486764705882,
+      "maximum_center_residual": 5.117434254131581e-17,
+      "maximum_work_quadrature_difference": 0.0,
+      "minimum_potential": -1886.50519418184,
+      "maximum_potential": -1856.01494137473
+    },
+    {
+      "run": "N050_E0.1_r0_meta",
+      "N": 50,
+      "E": 0.1,
+      "dt": 5e-05,
+      "periods": 80,
+      "acceptance": 0.764033577777778,
+      "maximum_center_residual": 1.9949319973733282e-17,
+      "maximum_work_quadrature_difference": 1.0019889917778357e-09,
+      "minimum_potential": -12174.3823283074,
+      "maximum_potential": -12141.9921525311
+    },
+    {
+      "run": "N050_E1.0_r0_meta",
+      "N": 50,
+      "E": 1,
+      "dt": 5e-05,
+      "periods": 80,
+      "acceptance": 0.764026944444444,
+      "maximum_center_residual": 2.1250362580715887e-17,
+      "maximum_work_quadrature_difference": 1.1578130010292398e-08,
+      "minimum_potential": -12172.6956774082,
+      "maximum_potential": -12139.0945646985
+    },
+    {
+      "run": "N100_E0.0_r0_meta",
+      "N": 100,
+      "E": 0,
+      "dt": 0.0002,
+      "periods": 160,
+      "acceptance": 0.246221988235294,
+      "maximum_center_residual": 1.9895109865109006e-17,
+      "maximum_work_quadrature_difference": 0.0,
+      "minimum_potential": -49178.3434024494,
+      "maximum_potential": -49121.8403063423
+    },
+    {
+      "run": "N100_E0.1_r0_meta",
+      "N": 100,
+      "E": 0.1,
+      "dt": 5e-05,
+      "periods": 80,
+      "acceptance": 0.453006622222222,
+      "maximum_center_residual": 1.8458541986565713e-17,
+      "maximum_work_quadrature_difference": 9.78404995910509e-10,
+      "minimum_potential": -49175.3424233997,
+      "maximum_potential": -49127.7082551992
+    },
+    {
+      "run": "N100_E1.0_r0_meta",
+      "N": 100,
+      "E": 1,
+      "dt": 5e-05,
+      "periods": 80,
+      "acceptance": 0.45301745,
+      "maximum_center_residual": 1.6188493687924188e-17,
+      "maximum_work_quadrature_difference": 8.806340101585874e-09,
+      "minimum_potential": -49173.3795818958,
+      "maximum_potential": -49120.946415004
+    }
+  ]
+}

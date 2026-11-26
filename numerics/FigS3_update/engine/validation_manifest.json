@@ -1,0 +1,41 @@
+[
+  {
+    "name": "N100_E0.1_r0",
+    "N": 100,
+    "E": 0.1,
+    "rep": 0,
+    "dt": 5e-05,
+    "burn_periods": 10,
+    "production_periods": 160,
+    "record_duration": 160,
+    "record_interval": 0.05,
+    "disorder_seed": 271000,
+    "noise_seed": 291101309
+  },
+  {
+    "name": "N100_E1.0_r0",
+    "N": 100,
+    "E": 1.0,
+    "rep": 0,
+    "dt": 5e-05,
+    "burn_periods": 10,
+    "production_periods": 160,
+    "record_duration": 160,
+    "record_interval": 0.05,
+    "disorder_seed": 271000,
+    "noise_seed": 291110390
+  },
+  {
+    "name": "N020_E0.0_r0",
+    "N": 20,
+    "E": 0.0,
+    "rep": 0,
+    "dt": 0.0002,
+    "burn_periods": 10,
+    "production_periods": 160,
+    "record_duration": 160,
+    "record_interval": 0.05,
+    "disorder_seed": 190280,
+    "noise_seed": 3900011
+  }
+]

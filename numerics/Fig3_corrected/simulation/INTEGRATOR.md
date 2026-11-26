@@ -1,0 +1,34 @@
+# Simulation method
+
+The C++ program retains the heterogeneous two-dimensional Langevin model in the supplied manuscript. The periodic square has side 5, kBT=1, WCA epsilon=1, spring k=5, spring rest length 0.001 and spring force cutoff 2. Particle sizes are independently drawn uniformly from {0.01,0.02,0.03}, charges independently from {0.9,1,1.1}, and mobilities/diffusivities are D=0.01/sigma. Pair separations use the minimum-image convention.
+
+The spring energy is shifted continuously to zero at its cutoff: U_s(r)=0.5*k*((r-r0)^2-(2-r0)^2) for r<2 and zero otherwise. This gives exactly the force specified inside the cutoff and zero outside, without introducing an artificial energy discontinuity. The WCA energy and force are unmodified. No overlaps are accepted merely by clipping the physical force.
+
+For numerical stability the program uses Metropolis-adjusted Brownian updates with the external field included in both the proposal and its acceptance probability. It does not use unstable Euler updates of the singular WCA force. In each sweep, particles are visited in ascending or descending order with equal probability. The field is held at its midpoint value E_mid=E*(1+cos(2*pi*(t+dt/2))) during the sweep. Set c_i=q_i-Q/(Gamma*D_i), with Q and Gamma defined below. A proposed one-particle increment is Gaussian with variance 2*D_i*dt in each coordinate. Its mean is D_i*dt*(F_int,i+c_i*E_mid*xhat), divided by 1+the magnitude of that mean divided by (2*sqrt(2*D_i*dt)). This tames the proposal near the singular core without modifying the physical potential.
+
+The log Metropolis-Hastings acceptance ratio is U_old-U_new+E_mid*c_i*delta_x+log(q_reverse/q_forward), using the same tamed drift in both Gaussian proposal densities. Consequently each accepted/rejected local kernel satisfies the exact local detailed-balance ratio exp(-Delta U+E_mid*c_i*delta_x), including trajectories that wind around the periodic domain. The random ascending/descending mixture preserves this property over the full sweep, since the external work increments add to E_mid*Delta P. At zero field the exact Boltzmann measure is invariant for any timestep. At nonzero field the simulated discrete dynamics obeys local detailed balance, and its thermodynamic entropy production is the expected external work. As dt decreases its kinetics converges to the specified overdamped Langevin dynamics. Finite-step dynamical errors are assessed by timestep comparisons, not by equilibrium preservation alone.
+
+The center of friction is separated analytically. Let Gamma=sum_i 1/D_i, Q=sum_i q_i and R=sum_i x_i/D_i/Gamma. Its exact independent motion has diffusion coefficient 1/Gamma and velocity Q*E(t)/Gamma. The saved coordinates y_i=x_i-R obey sum_i y_i/D_i=0. A local increment delta of particle i corresponds to the projected increment (e_i-1/(D_i*Gamma))*delta in the relative coordinates. The pair energy changes exactly as it would when moving particle i alone, because the remaining projection is a uniform translation. Recentring after a sweep is therefore equivalent to projecting every accepted increment. The small-step summed relative noise covariance is 2*(diag(D)-11^T/Gamma)*dt, which is the correct covariance. The summed directional drive gives (D_i*q_i-Q/Gamma)*E(t). The uniform center coordinate and its Gaussian displacement can be averaged analytically when constructing density correlations, reducing sampling variance without changing the observable.
+
+The code uses E(t)=E*(1+cos(2*pi*t)), a shift of the manuscript's time origin by one quarter-period. Relative snapshots are saved at every field extremum, t=0.5,1,1.5,... . Integer-period lags between equal extrema have a time-symmetric protocol and support the forward-correlation estimator without a separate reversed experiment.
+
+The expected external work per period decomposes into the exact center contribution 1.5*E^2*Q^2/Gamma and the internal contribution integral E(t) dP(t), where P=sum_i q_i*y_ix. The code saves the latter both by midpoint increments and by integration by parts, including the endpoint term 2*E*(P_end-P_start). Both estimates are retained. Dropping the endpoint term is not universally valid because the finite spring cutoff permits relative winding. The boundary-free bulk form may be used only with a demonstrated stationary bounded relative state and the associated finite-record uncertainty.
+
+# Files and reproduction
+
+Compile with `g++ -O3 -std=c++17 simulate_driven.cpp -o simulate_driven_uncached`. The production driver compiles missing binaries automatically with its recorded optimization options.
+
+For the cached implementation compile `g++ -O3 -std=c++17 simulate_driven_cached.cpp -o simulate_driven_cached`. This second implementation caches previously evaluated pair energies and forces, updating them after each accepted move and rebuilding the cache every 1,000 sweeps. It implements the same proposals and acceptance rule. Its metadata records the largest relative discrepancy against direct recomputation, so numerical cache accuracy can be checked independently. Each production run's implementation is recorded in the final job manifest, and the reproduction driver selects that same implementation. The convergence/control calculations use the cached implementation.
+
+Single-run syntax: `simulate_driven_uncached N E dt burn_periods production_periods disorder_seed noise_seed output_prefix`, or the corresponding cached executable with the same arguments.
+
+`run_driven.py` reads the final job manifest and runs eight simulations concurrently. The command-line option `--workers` changes the concurrency and `--force` recomputes existing completed runs. It uses the same disorder realization across field strengths for a given N and replicate, with independently seeded Brownian noise. The five realizations preserve both thermal and quenched-disorder variability. Production durations are longer at small N and weak fields, where internal-work fluctuations are a larger fraction of total entropy production. `run_validation_driven.py` repeats representative calculations with four times smaller timestep and runs zero-field controls.
+
+Each run writes:
+
+- `_meta.json`: all particle properties, seeds, actual timestep, runtime and aggregate acceptance.
+- `_snapshots.bin`: little-endian float64 rows with 1+2N entries, ordered [time,x0_relative,y0_relative,...,xN-1_relative,yN-1_relative]. There are 2*production_periods rows. The snapshot coordinates are unwrapped relative coordinates.
+- `_snapshots.csv`: the same snapshots in long CSV form.
+- `_periods.csv`: internal work by two equivalent discretizations, endpoint polarizations, energy, and Metropolis acceptance for each production period.
+
+No trajectory selection based on the resulting entropy-production estimate is performed.

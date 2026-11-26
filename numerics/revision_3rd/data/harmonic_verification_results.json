@@ -1,0 +1,12 @@
+{
+  "max_normalization_error": 4.440892098500626e-16,
+  "max_equilibrium_symmetry_error": 6.938893903907228e-18,
+  "max_256_vs_512_fourier_error": 0.0,
+  "max_analytic_vs_centered_derivative_error": 3.646307561444573e-11,
+  "independent_limit_max_abs_error": 8.110209552547598e-13,
+  "rigid_limit_max_abs_error": 6.207648978184821e-12,
+  "minimum_nested_resolution_increment": 1.306806170756093e-08,
+  "max_estimator_to_true_ratio": 0.3320484381044049,
+  "max_relative_weak_error_at_E_0p001": 5.269019167641886e-07,
+  "minimum_entropy_estimate": 9.271764053822147e-10
+}
