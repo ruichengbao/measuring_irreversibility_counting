@@ -26,20 +26,24 @@ Technical companion to Fig.~3 and Supplemental Fig.~S3 of
 \emph{Estimating Irreversibility via Cross-Correlations and Random Coarse-Graining}.
 
 \section{Measurement and model}
-The measurement in Fig.~3 and Sec.~IV of the Supplemental Material uses a $K\times K$ grid
-fixed in the laboratory frame. Each frame records the count $n_m(t)$ in every box $m$.
-For $N$ particles the normalized count is $\rho_m(t)=n_m(t)/N$. Two frames at times
-$t_0$ and $t_0+\tau$ give the product whose average defines the cross-correlation
+In Fig.~3 and Sec.~IV of the Supplemental Material, the detector records the counts in all
+$K\times K$ virtual boxes at each observation time $t$. The boxes are fixed in space.
+Write $n_m(t)$ for the number of particles in box $m$.
+For $N$ particles the normalized count is $\rho_m(t)=n_m(t)/N$.
+To estimate the cross-correlation, multiply the normalized count in box $n$ at time $t_0$
+by that in box $m$ at time $t_0+\tau$. Average this product over many driving periods,
+using the same starting phase and time lag $\tau$ each time. This gives
 \begin{equation}
  C^{t_0,\tau}_{nm}=\big\langle\rho_n(t_0)\rho_m(t_0+\tau)\big\rangle .
  \label{eq:C}
 \end{equation}
-Here $n$ indexes the initial box and $m$ the final box, with $\sum_{n,m}C^{t_0,\tau}_{nm}=1$.
-Experimentally, one averages these products over repeated pairs of frames at the same drive phase
-and lag. The relative-coordinate simulation computes the same average by sampling relative
-configurations and integrating analytically over the position and displacement of the center of
-friction. This removes one source of sampling noise in the correlation entering the bound.
-Particle-resolved work supplies a separate reference for the true entropy production (EP).
+These counts suffice. The experiment does not require tracking individual particles or
+measuring their friction-weighted mean position (the center of friction).
+
+To reduce sampling error in the same correlation, the simulation follows each particle's
+position relative to the center of friction and averages analytically over the center's
+position and displacement. Particle-resolved work supplies a separate reference for the
+true entropy production (EP).
 
 The model consists of overdamped Brownian particles on a periodic square of side $L=5$.
 The unwrapped particle positions $\mathbf x_a$ obey
@@ -166,7 +170,7 @@ on the relative configurations at the two observation times gives
  \label{eq:conditional}
 \end{equation}
 Only the average over relative configurations is sampled. The analysis uses the last 160 production
-periods, recording at both field extrema (320 frames), with all time origins that have an endpoint
+periods, recording at both field extrema (320 observation times), with all time origins that have an endpoint
 in the record.
 
 \textbf{Box probabilities.}

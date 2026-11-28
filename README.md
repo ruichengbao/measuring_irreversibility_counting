@@ -1,8 +1,10 @@
 # Estimating Irreversibility via Cross-Correlations and Random Coarse-Graining
 
-This repository contains the simulation and analysis code for the revised manuscript. The numerical examples ask how much entropy production (EP) can be inferred from the asymmetry of two-time cross-correlations. In the four-state model a noisy measurement returns one label. In the particle model each frame records the particle counts in a grid fixed in the laboratory frame.
+This repository contains the simulation and analysis code for the revised manuscript. The numerical examples ask how much entropy production (EP) can be inferred from the asymmetry of two-time cross-correlations. In the four-state model a noisy measurement returns one label. In the particle model the detector records the particle count in every virtual box of a grid fixed in space.
 
-**What does the relative-coordinate simulation calculate?** The two-time correlation in Fig. 3 and Sec. IV of the Supplemental Material is the average product of the normalized count in an initial box and the normalized count in a final box. The simulation evaluates this product for the same boxes, drive phase and time lag. It samples relative particle configurations and averages analytically over the position and displacement of the center of friction. This reduces finite-sample error in the correlation used for the entropy-production bound. An experiment can estimate that correlation directly by averaging the products from repeated pairs of frames.
+Fig. 3 and Sec. IV of the Supplemental Material use the two-time cross-correlations of these counts. For each pair of boxes, multiply the fraction of particles in box $n$ at time $t_0$ by the fraction in box $m$ at time $t_0+\tau$. Average this product over driving cycles using the same starting phase and time lag $\tau$.
+
+To reduce sampling error in this correlation, the simulation describes each particle's motion relative to the center of friction, the friction-weighted mean position of the particles. It averages analytically over the position and displacement of this center. The experiment requires only the box counts. There is no need to measure the center of friction or track individual particles.
 
 The [Many-Body Simulation Methods (PDF)](MANY_BODY_SIMULATION_METHODS.pdf) derives this equivalence and gives the integration scheme, the independent evaluation of the bound, and the numerical checks. [LaTeX source](numerics/Fig3_corrected/MANY_BODY_SIMULATION_METHODS.tex)
 
