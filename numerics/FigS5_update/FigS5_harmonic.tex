@@ -1,0 +1,35 @@
+% Compile with pdflatex from this directory. Panels (a,b) are the author's PDF.
+\documentclass[tikz,border=0pt]{standalone}
+\usepackage{amsmath,graphicx,pgfplots}
+\pgfplotsset{compat=1.18}
+\definecolor{kblue}{HTML}{4C78A8}
+\definecolor{kteal}{HTML}{72B7B2}
+\definecolor{kgreen}{HTML}{54A24B}
+\newcommand{\harmonictable}{../revision_3rd/data/harmonic_weak_field_curves.csv}
+\newcommand{\fieldcurve}[3]{%
+  \addplot[color=#2,line width=1.8bp,mark=#3,mark repeat=14,mark size=1.65bp,
+    x filter/.expression={(\thisrow{N}==20 && abs(\thisrow{kappa}-#1)<0.00001) ? x : nan}]
+    table[col sep=comma,x=E,y=ratio_to_weak]{\harmonictable};}
+\begin{document}
+\begin{tikzpicture}[x=1bp,y=1bp]
+  \node[anchor=south west,inner sep=0pt] at (0,0) {\includegraphics{figures_out/FigS_interaction.pdf}};
+  \node[anchor=base west,inner sep=0pt,font=\sffamily\fontsize{17bp}{18bp}\selectfont]
+    at (544,218) {(c)};
+  \begin{axis}[
+      at={(591bp,40bp)},anchor=south west,
+      width=194bp,height=166bp,scale only axis,
+      xmin=0,xmax=1.01,ymin=.54,ymax=1.05,
+      xtick={0,0.25,0.5,0.75,1},ytick={.6,.7,.8,.9,1},
+      tick label style={font=\sffamily\fontsize{10.5bp}{11bp}\selectfont},
+      grid=major,grid style={dashed,color=black!15,line width=.5bp},
+      axis line style={line width=.65bp},tick align=inside,
+      major tick length=3bp,unbounded coords=discard,filter discard warning=false,
+      xlabel={$E$},ylabel={$\sigma^{\rm est}_{[0,\mathcal T]}/(\mathcal A_{N,\kappa}E^2)$},
+      label style={font=\fontsize{13bp}{14bp}\selectfont}]
+    \addplot[black,loosely dashed,line width=1.1bp] coordinates {(0,1) (1,1)};
+    \fieldcurve{.01}{kblue}{*}
+    \fieldcurve{.1}{kteal}{square*}
+    \fieldcurve{1}{kgreen}{triangle*}
+  \end{axis}
+\end{tikzpicture}
+\end{document}

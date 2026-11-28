@@ -1,0 +1,118 @@
+[
+  {
+    "N": 50,
+    "E": 0.1,
+    "coarse": {
+      "N": 50,
+      "E": 0.1,
+      "dt": 0.0002,
+      "true_ep": 0.37525346490062633,
+      "true_ep_block_sem": 0.0022292042688124496,
+      "internal_ep": -0.004260035099373702,
+      "radius_squared_mean": 0.012428271702251682,
+      "radius_squared_sem": 6.855135206388767e-05,
+      "acceptance": 0.599007905882353
+    },
+    "fine": {
+      "N": 50,
+      "E": 0.1,
+      "dt": 5e-05,
+      "true_ep": 0.3801770229909775,
+      "true_ep_block_sem": 0.003224587029503487,
+      "internal_ep": 0.000663522990977461,
+      "radius_squared_mean": 0.012448606181657055,
+      "radius_squared_sem": 9.850948634276858e-05,
+      "acceptance": 0.764033577777778
+    },
+    "true_ep_difference": -0.0049235580903511655,
+    "relative_true_ep_difference": -0.012950698734015846,
+    "difference_combined_sem": 0.00392011647568459
+  },
+  {
+    "N": 50,
+    "E": 1.0,
+    "coarse": {
+      "N": 50,
+      "E": 1,
+      "dt": 0.0002,
+      "true_ep": 37.97667494799337,
+      "true_ep_block_sem": 0.027223521187406702,
+      "internal_ep": 0.02532494799337759,
+      "radius_squared_mean": 0.012443474239176033,
+      "radius_squared_sem": 6.256859092408964e-05,
+      "acceptance": 0.598380635294118
+    },
+    "fine": {
+      "N": 50,
+      "E": 1,
+      "dt": 5e-05,
+      "true_ep": 37.97194907141477,
+      "true_ep_block_sem": 0.03086521253166169,
+      "internal_ep": 0.02059907141477799,
+      "radius_squared_mean": 0.012443877842511662,
+      "radius_squared_sem": 9.573118907059434e-05,
+      "acceptance": 0.764026944444444
+    },
+    "true_ep_difference": 0.00472587657859691,
+    "relative_true_ep_difference": 0.00012445704511266566,
+    "difference_combined_sem": 0.04115557617706047
+  },
+  {
+    "N": 100,
+    "E": 0.1,
+    "coarse": {
+      "N": 100,
+      "E": 0.1,
+      "dt": 0.0002,
+      "true_ep": 0.7340681584312349,
+      "true_ep_block_sem": 0.00249734766865742,
+      "internal_ep": 0.002782821892773224,
+      "radius_squared_mean": 0.011534994450380202,
+      "radius_squared_sem": 2.6779824419408553e-05,
+      "acceptance": 0.246275435294118
+    },
+    "fine": {
+      "N": 100,
+      "E": 0.1,
+      "dt": 5e-05,
+      "true_ep": 0.7302906940910162,
+      "true_ep_block_sem": 0.0035485770305943437,
+      "internal_ep": -0.0009946424474453796,
+      "radius_squared_mean": 0.011484911240704856,
+      "radius_squared_sem": 3.7384766420543166e-05,
+      "acceptance": 0.453006622222222
+    },
+    "true_ep_difference": 0.003777464340218639,
+    "relative_true_ep_difference": 0.005172548918921119,
+    "difference_combined_sem": 0.004339256194350642
+  },
+  {
+    "N": 100,
+    "E": 1.0,
+    "coarse": {
+      "N": 100,
+      "E": 1,
+      "dt": 0.0002,
+      "true_ep": 73.20720394316409,
+      "true_ep_block_sem": 0.02439036862917188,
+      "internal_ep": 0.07867028931792362,
+      "radius_squared_mean": 0.01153147453893653,
+      "radius_squared_sem": 2.5663375577120932e-05,
+      "acceptance": 0.246488835294118
+    },
+    "fine": {
+      "N": 100,
+      "E": 1,
+      "dt": 5e-05,
+      "true_ep": 73.18404393225487,
+      "true_ep_block_sem": 0.03666774678150065,
+      "internal_ep": 0.05551027840869838,
+      "radius_squared_mean": 0.011541505928705998,
+      "radius_squared_sem": 3.638938858777682e-05,
+      "acceptance": 0.45301745
+    },
+    "true_ep_difference": 0.023160010909222706,
+    "relative_true_ep_difference": 0.0003164625738728172,
+    "difference_combined_sem": 0.044038775367840816
+  }
+]

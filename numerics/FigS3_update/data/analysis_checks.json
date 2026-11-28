@@ -1,0 +1,16 @@
+{
+  "realizations": 225,
+  "complete_inventory": true,
+  "summary_points_per_grid": 45,
+  "primary_density_over_ftur_ratio_min": 6.730227045797857,
+  "primary_density_over_ftur_ratio_max": 14.978177993798985,
+  "primary_every_realization_exceeds_target_scan_ftur": true,
+  "primary_minimum_realization_advantage_over_target_scan_ftur": 6.305385208066723,
+  "minimum_true_rate": 0.0027000000000000006,
+  "density_Q_min_K5": 0.19554048628353474,
+  "density_Q_max_K5": 0.7207694276798623,
+  "all_finite_K5": true,
+  "density_Q_min_K20": 0.5755049596407871,
+  "density_Q_max_K20": 0.9701991829874071,
+  "all_finite_K20": true
+}

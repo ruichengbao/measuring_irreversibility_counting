@@ -1,0 +1,43 @@
+{
+  "model": "Homogeneous noninteracting Brownian particles on a 2D torus",
+  "L": 5.0,
+  "D": 1.0,
+  "mu": 1.0,
+  "q": 1.0,
+  "kBT": 1.0,
+  "field": "E(t)=E[1+sin(2*pi*t/T)]",
+  "T": 1.0,
+  "t0": 0.25,
+  "tau": 1.0,
+  "method": "Analytically integrated Fourier propagator; 32 positive Fourier modes",
+  "old_data_modified": false,
+  "coefficient_method": "Analytic derivative at E=0, no fitting",
+  "nested_grid_chains": [
+    [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    [
+      1,
+      5,
+      10,
+      20,
+      40
+    ]
+  ],
+  "validation": {
+    "max_probability_normalization_error": 2.220446049250313e-16,
+    "max_absolute_rate_change_16_to_32_Fourier_modes": 0.0,
+    "weak_field_exact_rate_over_A_E2_at_E1e_minus4_range": [
+      0.9999999945726717,
+      0.9999999947948076
+    ],
+    "max_analytic_derivative_vs_central_difference_error": 3.171033856504135e-15,
+    "nested_resolution_monotonicity_checked": true,
+    "entropy_production_bound_checked": true
+  }
+}

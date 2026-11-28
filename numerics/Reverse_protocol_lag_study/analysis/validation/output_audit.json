@@ -1,0 +1,11 @@
+{
+  "records": 270,
+  "expected_records": 270,
+  "missing_records": 0,
+  "maximum_probability_normalization_error": 2.7866597918091432e-14,
+  "minimum_probability": 0.0,
+  "maximum_phase_quality": 0.9825293600423185,
+  "phase_selected": 553,
+  "integer_selected": 1067,
+  "guarded_rate_below_saved_integer": 21
+}

@@ -1,0 +1,47 @@
+{
+  "state_labels": {
+    "1": {
+      "a": 0,
+      "b": 0
+    },
+    "2": {
+      "a": 1,
+      "b": 0
+    },
+    "3": {
+      "a": 1,
+      "b": 1
+    },
+    "4": {
+      "a": 0,
+      "b": 1
+    }
+  },
+  "transitions": "1<->2<->3<->4<->1",
+  "steady_case": {
+    "k_plus": "exp(A/2)",
+    "k_minus": "exp(-A/2)",
+    "A": 1.0
+  },
+  "periodic_case": {
+    "A(t)": "A0 + A1*sin(2*pi*t/T)",
+    "A0": 1.0,
+    "A1": 0.8,
+    "T": 0.2,
+    "k_plus(t)": "exp(A(t)/2)",
+    "k_minus(t)": "exp(-A(t)/2)"
+  },
+  "four_state_mapping": {
+    "O_I": "x*(1-b)",
+    "O_II": "(1-x)*a",
+    "O_III": "x*b",
+    "O_IV": "(1-x)*(1-a)"
+  },
+  "three_state_mapping": {
+    "A": "x*(1-b)",
+    "B": "x*b + (1-x)*a",
+    "C": "(1-x)*(1-a)"
+  },
+  "steady_observable_estimator": "max_tau sigma_est[0,tau]/tau computed numerically with bounded scalar optimization on tau in [1e-5, 10]",
+  "periodic_observable_estimator": "sigma_est[0,T]/T over one full driving period"
+}

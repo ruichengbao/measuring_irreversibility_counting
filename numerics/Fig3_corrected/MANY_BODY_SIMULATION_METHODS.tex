@@ -1,0 +1,260 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,booktabs,tabularx}
+\usepackage[margin=0.91in,headheight=13pt]{geometry}
+\usepackage{microtype,fancyhdr,xcolor,enumitem}
+\usepackage[hypertexnames=false,colorlinks=true,linkcolor=black,urlcolor=blue!50!black]{hyperref}
+\hypersetup{pdftitle={Many-body simulation methods: estimating entropy production from particle counts}}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small Many-body simulation methods}
+\fancyhead[R]{\small Periodically driven particles}
+\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt plus 1pt}
+\setlength{\abovedisplayskip}{7pt}\setlength{\belowdisplayskip}{7pt}
+\setlist[enumerate]{leftmargin=*,itemsep=2pt,topsep=1pt,parsep=1pt}
+\newcommand{\Tr}{\mathcal T}
+\newcommand{\ch}{Q_{\mathrm{ch}}}
+\newcommand{\ex}{\hat{\mathbf x}}
+\newcommand{\dd}{\mathrm d}
+\newcommand{\source}[2]{\href{https://github.com/ruichengbao/measuring_irreversibility_counting/blob/e868697ff37a81a72f4ee47956546a0e9cc1604c/#1}{#2}}
+\begin{document}
+\thispagestyle{plain}
+{\LARGE\bfseries Many-body simulation methods\par}
+{\large Estimating entropy production from particle counts\par}
+\vspace{3pt}
+Technical companion to Fig.~3 and Supplemental Fig.~S3 of
+\emph{Estimating Irreversibility via Cross-Correlations and Random Coarse-Graining}.
+
+\section{Measurement and model}
+Each frame records the number $n_m(t)$ of particles in every box $m$ of a $K\times K$ grid.
+For $N$ particles the normalized counts are $\rho_m(t)=n_m(t)/N$.
+Two frames separated by time $\tau$ give the cross-correlation
+\begin{equation}
+ C^{t_0,\tau}_{nm}=\big\langle\rho_n(t_0)\rho_m(t_0+\tau)\big\rangle .
+ \label{eq:C}
+\end{equation}
+Here $n$ indexes the initial box and $m$ the final box. Repeating the two observations
+at the same phase $t_0$ of the drive estimates their ensemble average. Summing over all ordered
+box pairs gives $\sum_{n,m}C^{t_0,\tau}_{nm}=1$. Particle identities and trajectories between frames
+are unnecessary for this measurement. The simulation evaluates this average by integrating
+over the model's known translation statistics. Particle-resolved work provides a separate reference
+for the true entropy production (EP).
+
+The model consists of overdamped Brownian particles on a periodic square of side $L=5$.
+The unwrapped particle positions $\mathbf x_a$ obey
+\begin{equation}
+ \dd\mathbf x_a=\mu_a\big[-\nabla_a U+q_a E(t)\ex\big]\,\dd t+\sqrt{2\mu_a}\,\dd\mathbf W_a .
+ \label{eq:model}
+\end{equation}
+Lengths and times use the simulation units, and energies use $k_BT=1$, so that diffusivity
+$D_a=\mu_a$ equals mobility. The $\mathbf W_a$ are independent two-dimensional standard Wiener
+processes, $\ex$ is the unit vector along the field, and $q_a$ is the particle charge.
+The potential $U$ sums two pair energies over $a<b$. At minimum-image distance $r$ and mean
+diameter $\sigma_{ab}=(\sigma_a+\sigma_b)/2$, they are
+\begin{align}
+ V_{\rm WCA}(r)&=\begin{cases}
+ 4\epsilon[(\sigma_{ab}/r)^{12}-(\sigma_{ab}/r)^6]+\epsilon,&r<2^{1/6}\sigma_{ab},\\
+ 0,&r\geq2^{1/6}\sigma_{ab},
+ \end{cases}\\[-1pt]
+ V_{\rm spring}(r)&=\begin{cases}
+ \tfrac12 k[(r-r_0)^2-(l_0-r_0)^2],&r<l_0,\\
+ 0,&r\geq l_0 .
+ \end{cases}
+\end{align}
+The Weeks--Chandler--Andersen repulsion has strength $\epsilon=1$. Every pair has spring
+stiffness $k=5$, rest length $r_0=10^{-3}$ and cutoff $l_0=2$. The energy shift makes the
+spring potential continuous at the cutoff. Each particle's diameter $\sigma_a$ and charge $q_a$
+are drawn independently and uniformly from $\{0.01,0.02,0.03\}$ and $\{0.9,1.0,1.1\}$. The mobility is
+$\mu_a=0.01/\sigma_a$.
+
+The field is $E(t)=E[1+\sin(2\pi t/\Tr)]$ with period $\Tr=1$. The simulator takes its
+time origin at the field maximum and uses the equivalent cosine protocol. The scan covers
+$N=1,2,5,10,20,50,60,80,100$ and $E=0.1,0.2,0.4,0.5,0.8,1.0$. Five realizations at each
+size retain the same particle assignments across fields. The
+\source{numerics/Fig3_corrected/simulation/jobs_manifest_driven_final.json}{production manifest}
+records thermal and disorder seeds and run lengths for the 240 interacting runs.
+The 30 one-particle cases use the exact propagator. Equation numbers prefixed by S identify formulas moved from the Supplemental Material.
+
+\newpage
+\section{Relative-coordinate simulation and the true EP}
+Integrating over the collective displacement removes the sampling noise of the cluster's slow diffusion.
+Define the total friction $\Gamma=\sum_a\mu_a^{-1}$, total charge $\ch=\sum_a q_a$,
+center of friction $\mathbf R=\Gamma^{-1}\sum_a\mathbf x_a/\mu_a$, and relative positions
+$\mathbf y_a=\mathbf x_a-\mathbf R$. They satisfy $\sum_a \mathbf y_a/\mu_a=0$.
+Pair forces cancel in the weighted sum of Eq.~\eqref{eq:model}. With
+$\mathbf F_a^{\rm int}=-\nabla_a U$ and $\tilde q_a=q_a-\ch/(\mu_a\Gamma)$,
+\begin{align}
+ \dd\mathbf R&=\frac{\ch}{\Gamma}E(t)\ex\,\dd t+\sqrt{\frac{2}{\Gamma}}\,\dd\mathbf W_R ,
+ \tag{S41}\label{eq:cm}\\
+ \dd\mathbf y_a&=\mu_a\big[\mathbf F_a^{\rm int}+\tilde q_a E(t)\ex\big]\,\dd t
+ +\sqrt{2\mu_a}\,\dd\mathbf W_a-\frac1{\Gamma}\sum_b\sqrt{2/\mu_b}\,\dd\mathbf W_b .
+ \tag{S42}\label{eq:rel}
+\end{align}
+Here $\mathbf W_R=\Gamma^{-1/2}\sum_b\mu_b^{-1/2}\mathbf W_b$ has zero covariance with the
+Gaussian noise in Eq.~\eqref{eq:rel}, so the collective increments are independent of the
+relative dynamics. The relative mobility matrix is $\mu_a\delta_{ab}-1/\Gamma$, with
+$\delta_{ab}$ the Kronecker delta.
+
+\textbf{Numerical update.}
+The code integrates Eq.~\eqref{eq:rel} in sweeps with time step $\Delta t=2\times10^{-4}$.
+It chooses ascending or descending particle order with equal probability and holds the field
+at its midpoint value $E_{\rm mid}=E(t+\Delta t/2)$ during a sweep. For particle $a$, define
+$s_a=\sqrt{2\mu_a\Delta t}$ and $\mathbf d_a=\mu_a\Delta t(\mathbf F_a^{\rm int}+\tilde q_a E_{\rm mid}\ex)$.
+Propose
+\begin{equation}
+ \boldsymbol\delta=\frac{\mathbf d_a}{1+|\mathbf d_a|/(2s_a)}+s_a\boldsymbol\eta ,
+ \qquad \boldsymbol\eta\sim{\cal N}(\mathbf 0,\mathbf I_2),\tag{S43}
+\end{equation}
+where $\mathbf I_2$ is the two-dimensional identity matrix. Let $g_{\rm f}$ be this Gaussian
+proposal density at $\boldsymbol\delta$ and $g_{\rm r}$ the Gaussian density at
+$-\boldsymbol\delta$ using the drift evaluated at the proposed position. For pair-energy change
+$\Delta U$, accept the move with probability
+\begin{equation}
+ \min\!\left\{1,\exp[-\Delta U+\tilde q_a E_{\rm mid}\delta_x]\,g_{\rm r}/g_{\rm f}\right\}.
+\end{equation}
+The bounded proposal drift controls steps near a steep repulsive core. The acceptance probability
+uses the full pair energy and includes external work. After each sweep the code subtracts a common
+shift to restore $\sum_a\mathbf y_a/\mu_a=0$. Translation invariance makes this equivalent to
+projecting each accepted move. The direct and cached implementations use the same update. Each run
+discards 10 initial periods. The full production record spans 160--10,000 periods, with longer
+records at small $N$ and weak fields.
+
+\textbf{Reference work.}
+In the periodic steady state, the mean changes in potential energy and system entropy vanish
+over a cycle. The true EP per period, in units of $k_B$, equals the mean external work
+$\langle\sum_a\int q_a E(t)\circ\dd x_{a,x}\rangle$ in units of $k_BT$, with the integral
+taken over one cycle (Stratonovich convention). For relative polarization
+$\Pi(t)=\sum_a q_a y_{a,x}(t)$, Eq.~\eqref{eq:cm} gives
+\begin{equation}
+ \sigma_{[0,\Tr]}=\frac{3\Tr E^2\ch^2}{2\Gamma}
+   +\left\langle\int_0^\Tr E(t)\,\dd\Pi(t)\right\rangle .
+ \label{eq:work}
+\end{equation}
+The collective term follows from $\int_0^\Tr E(t)^2\dd t=3\Tr E^2/2$. For cycles starting at
+a field maximum, integration by parts gives the relative work as
+$2E[\Pi(\Tr)-\Pi(0)]-\int_0^\Tr E'(t)\Pi(t)\dd t$. The code retains the boundary term,
+compares this expression with direct displacement work and averages over all production periods.
+Dividing Eq.~\eqref{eq:work} by $\Tr$ gives the reference rate.
+
+\newpage
+\section{Evaluating the two-time count correlations}
+Figure~3 uses integer-period lags $\tau=\ell\Tr$ with $\ell=1,\ldots,40$. In the sine convention
+the initial phase $t_0$ is a field maximum ($\Tr/4$) or minimum ($3\Tr/4$). The field satisfies
+$E(t_0+s)=E(t_0+\tau-s)$ over each window and the periodic steady-state endpoint distributions
+agree. The reversed experiment therefore has the same correlation matrix as the forward one.
+Reversing the time order exchanges its two box indices. The equal-weight average of the two
+extremum matrices also gives a valid bound by joint convexity of relative entropy. General
+driving windows require forward and reversed observations.
+
+At any fixed phase the periodic center $\mathbf R\bmod L$ is uniform on the box
+$\Omega=[0,L)^2$, independently of the relative configuration. Over an integer-period lag
+its unwrapped increment $\boldsymbol\Delta$ is Gaussian with mean
+$\bar\Delta\ex=(\ch E\tau/\Gamma)\ex$ and variance $s^2=2\tau/\Gamma$ per axis.
+Write $G_\tau$ for this two-dimensional density, $\mathbf y(t)$ for the collection
+of all relative coordinates, and
+$\rho_m(\mathbf R,\mathbf y)=N^{-1}\sum_a\mathbf 1_m(\mathbf R+\mathbf y_a)$,
+where $\mathbf 1_m$ is the periodic box indicator. The conditional average of the same two
+counts in Eq.~\eqref{eq:C} is
+\begin{equation}
+ C^{t_0,\tau}_{nm} =
+ \left\langle \frac{1}{L^2}\int_\Omega\dd^2 R
+ \int_{\mathbb R^2}\dd^2\Delta\,G_\tau(\boldsymbol\Delta)
+ \rho_n(\mathbf R,\mathbf y(t_0))\,
+ \rho_m(\mathbf R+\boldsymbol\Delta,\mathbf y(t_0+\tau))\right\rangle_{\mathbf y}.
+ \tag{S47}\label{eq:conditional}
+\end{equation}
+Only the average over relative configurations is sampled. The analysis uses the last 160 production
+periods, recording at both field extrema (320 frames), with all time origins that have an endpoint
+in the record.
+
+\textbf{Box probabilities.}
+Translation symmetry reduces the ordered matrix to the distribution of the box displacement
+$d=m-n$ (a two-dimensional index modulo $K$ in each direction), with
+$P_d=\sum_n C^{t_0,\tau}_{n,n+d}=K^2 C^{t_0,\tau}_{0,d}$. A box has width $h=L/K$.
+Let $g_L(z;s)$ be the one-dimensional Gaussian density of standard deviation $s$, wrapped
+to period $L$. Integrating over the initial position and the final box gives the kernel
+\begin{equation}
+ \kappa_h(z;s)=\frac1h\int_{-h}^h(h-|v|)g_L(z+v;s)\,\dd v .
+\end{equation}
+For each ordered pair $(a,b)$, including $a=b$, form the relative displacement
+$\mathbf u=\mathbf y_b(t_0+\tau)-\mathbf y_a(t_0)$ modulo $L$. Write $H(\mathbf u)$
+for its normalized distribution over pairs and time origins. Equation~\eqref{eq:conditional} becomes
+\begin{equation}
+ P_d=\int_{\Omega}H(\mathbf u)\,
+ \kappa_h(d_xh-u_x-\bar\Delta;s)\,\kappa_h(d_yh-u_y;s)\,\dd^2u.
+\end{equation}
+The Gaussian and box integrals are analytical. The code approximates $H$ by distributing
+each sample among the four neighboring grid points with nonnegative bilinear weights.
+It averages over reflection in the transverse coordinate and computes the finest observation
+grid ($K=160$) first. Merging its boxes gives the other grids exactly through
+$C^{\rm coarse}=A C^{\rm fine}A^{\mathsf T}$, where $A_{mi}=1$ if fine box $i$ lies in
+coarse box $m$, and zero otherwise.
+
+The integration grid has $S=128$ points per side for $N\le5$, $256$ for $5<N\le20$, and
+$512$ for $N>20$ in the interacting runs. $S$ controls numerical precision. The number of
+boxes observed along each side is $K\in\{5,10,20,40,80,160\}$. For $N=1$, $\mathbf y_1=0$ and
+the code evaluates the wrapped Gaussian propagator directly and scans the lag without trajectory
+sampling. The integer-period displacement then depends only on the constant field component.
+For the drive in Sec.~1 even a perfectly resolved unwrapped displacement recovers at most $2/3$ of
+the translational EP over the period.
+
+\newpage
+\section{Evaluating the bound on independent realizations}
+Suppressing the phase and lag indices, write $C^{\mathsf T}$ for the transposed count matrix.
+The population counting bound per period is $(\Tr/\tau)D(C\Vert C^{\mathsf T})$, where
+$D(C\Vert C^{\mathsf T})=\sum_{n,m}C_{nm}\ln(C_{nm}/C_{mn})$.
+Selecting the largest value after fitting a noisy matrix on the same trajectory can
+bias the estimate upward. For a real matrix $f$ the variational identity reads
+\begin{equation}
+ D(C\Vert C^{\mathsf T})=\max_f S(C,f),\qquad S(C,f)=\sum_{n,m}\big[C_{nm}f_{nm}-C_{mn}(e^{f_{nm}}-1)\big].\tag{S48}
+\end{equation}
+Each term is concave in $f_{nm}$ and attains its maximum at $\ln(C_{nm}/C_{mn})$ for
+positive entries. At the maximum the exponential terms cancel because both matrices sum to one.
+Every fixed $f$ therefore gives a lower bound linear in the measured correlations.
+
+\textbf{Fitting and scoring.}
+For each $N>1$, field $E$ and observation grid $K$, each of the five realizations is evaluated once
+with a function learned from the other four. The four training histograms use their own
+relative coordinates and the evaluated realization's fixed $\ch$ and $\Gamma$ in the Gaussian
+kernels. These two constants describe its particle parameters and require no use of its
+thermal trajectory during selection.
+\begin{enumerate}
+\item For each lag and phase choice (maximum, minimum, or the equal-weight average), hold out
+one of the four training realizations. Average the probabilities $P_d$ on the other three,
+and fit $f_d$ as the log ratio $\ln(P_d/P_{-d})$ clipped to $[-c,c]$.
+Try $c=8,12,16,20,24,28,32,40,50,64,80,100,150$.
+\item Score each candidate on the fourth training realization using $S(C,f)/\ell$,
+with $f_{nm}=f_{m-n}$. Select the lag, phase and cap that maximize the average score
+over all four inner holdouts. Refit $f$ using all four training realizations.
+\item Evaluate $S(C^{\rm test},f)/\ell$ on the fifth realization using its own correlation
+matrix $C^{\rm test}$. Repeat until each realization has provided the test data.
+\end{enumerate}
+The population inequality carries over in expectation to an independently estimated linear
+score, subject to time-step and quadrature error. An individual finite trajectory can fluctuate
+on either side of its population value. The single-particle code uses its deterministic
+probabilities for every lag (log-ratio cap 20).
+
+\textbf{Figure values.}
+The plotted rate is the mean of the five evaluated per-period scores divided by $\Tr$.
+Rate error bars give the sample standard deviation across the five realizations. The quality
+factor $\mathcal Q$ divides the mean estimated rate by the mean true rate. Figure~3 uses $K=20$. Its inset compares all six grids at $N=5$, $E=0.1$. Refining $K$ from 20 to 160 raises the
+estimated rate there by $2.2\%$. At $N=100$, $E=1$ the same refinement raises $\mathcal Q$
+from $0.4156$ to $0.4996$. The grids share the same trajectories and each grid has its own
+training-only selection.
+
+\textbf{Numerical checks.}
+For $N=50,100$ at $E=0.1,1.0$, decreasing $\Delta t$ from $2\times10^{-4}$ to
+$5\times10^{-5}$ changed the true rate by at most $1.32\%$ and the $K=160$ score, evaluated
+with the same fitted function and window, by at most $2.10\%$. The differences were within
+$1.33$ combined trajectory sampling standard errors. Separate $E=0$ controls gave zero work
+for $N=20,100$. Selected tests doubling $S$ changed the count-matrix relative entropy by
+less than $0.11\%$. These checks apply to the tested cases.
+
+\textbf{Run and inspect the calculations.}
+The \source{README.md}{repository README} gives the commands for regenerating trajectories,
+rebuilding tables and plotting. The \source{numerics/Fig3_corrected/analysis/analyze_group.py}{selection code},
+\source{numerics/Fig3_corrected/analysis/positive_kernel.py}{box integrals},
+\source{numerics/Fig3_corrected/validation/validation_summary.json}{validation results} and
+\source{numerics/Fig3_grid_update/plotting_tables/fig3_K20_summary.csv}{Fig.~3 data}
+are linked to the simulation version used for this note.
+\end{document}

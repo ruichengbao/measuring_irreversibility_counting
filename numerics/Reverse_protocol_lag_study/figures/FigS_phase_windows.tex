@@ -1,0 +1,59 @@
+% Run pdflatex FigS_phase_windows.tex from this directory.
+\documentclass[tikz,border=3pt]{standalone}
+\usepackage{amsmath,pgfplots}
+\usepgfplotslibrary{groupplots}
+\usetikzlibrary{plotmarks}
+\pgfplotsset{compat=1.18}
+\definecolor{blue}{HTML}{4C78A8}
+\definecolor{teal}{HTML}{579D99}
+\definecolor{green}{HTML}{46933F}
+\definecolor{orange}{HTML}{CC7900}
+\definecolor{purple}{HTML}{956794}
+\definecolor{brown}{HTML}{87553B}
+\pgfplotstableread[col sep=comma]{../analysis/summary/fig3_K20_summary.csv}\summarytable
+\pgfplotsset{
+  field/.style={y filter/.expression={abs(\thisrow{E}-#1)<1e-6 ? y : nan}},
+  line/.style={line width=.85pt,mark size=2.2pt},
+}
+\newcommand{\gaincurve}[3]{%
+  \addplot[line,field=#1,#2] table[x=N,y=expanded_over_old]{\summarytable};
+  \addlegendentry{#3}}
+\begin{document}
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1,horizontal sep=1.65cm},
+  width=5.55cm,height=4.15cm,scale only axis,
+  xmode=log,xmin=.89,xmax=113,xtick={1,2,5,10,20,50,100},
+  xticklabels={1,2,5,10,20,50,100},minor x tick num=0,
+  xlabel={Particle number $N$},tick align=inside,
+  grid=major,major grid style={black!12},
+  label style={font=\normalsize},tick label style={font=\small},
+  title style={at={(0,1.02)},anchor=south west,font=\normalsize},
+  legend style={font=\footnotesize,draw=none,fill=white,cells={anchor=west}},
+  filter discard warning=false]
+\nextgroupplot[
+  title={(a) $E=1$},ylabel={Recovered fraction $\mathcal Q$},ymin=.0,ymax=1.0,
+  ytick={.2,.4,.6,.8,1.0},legend style={at={(.04,.02)},anchor=south west}]
+  \addplot[black!65,densely dotted,thick,forget plot] coordinates {(.89,.66666667)(113,.66666667)};
+  \node[fill=white,inner sep=1pt,anchor=south east] at (axis cs:105,.668) {$2/3$};
+  \addplot[line,blue,mark=square*,field=1] table[x=N,y=old_quality]{\summarytable};
+  \addlegendentry{Integer periods}
+  \addplot[line,orange,dashed,mark=triangle*,field=1] table[x=N,y=short_quality]{\summarytable};
+  \addlegendentry{Phase windows}
+  \addplot[line,purple,loosely dotted,mark=o,mark options={solid},mark size=3.4pt,field=1] table[x=N,y=expanded_quality]{\summarytable};
+  \addlegendentry{Both available}
+\nextgroupplot[
+  title={(b) Both available},ylabel={Estimate / integer-period estimate},ymin=.88,ymax=2.7,
+  ytick={1,1.5,2,2.5},
+  legend columns=2,
+  legend style={at={(.98,.97)},anchor=north east,column sep=.08cm}]
+  \addplot[black!65,densely dotted,thick,forget plot] coordinates {(.89,1)(113,1)};
+  \gaincurve{.1}{blue,mark=*}{$E=0.1$}
+  \gaincurve{.2}{teal,dashed,mark=square*}{$E=0.2$}
+  \gaincurve{.4}{green,dashdotted,mark=triangle*}{$E=0.4$}
+  \gaincurve{.5}{orange,densely dotted,mark=diamond*}{$E=0.5$}
+  \gaincurve{.8}{purple,dashed,mark=triangle*,mark options={rotate=180}}{$E=0.8$}
+  \gaincurve{1}{brown,dashdotted,mark=pentagon*}{$E=1.0$}
+\end{groupplot}
+\end{tikzpicture}
+\end{document}

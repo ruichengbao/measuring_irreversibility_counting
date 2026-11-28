@@ -1,0 +1,80 @@
+% Rebuild the missing v3 supplement figure from the archived plotting tables:
+% cd numerics/FigS_boxes && pdflatex FigS_boxes.tex
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage{amsmath,pgfplots}
+\usepgfplotslibrary{groupplots}
+\usetikzlibrary{plotmarks}
+\pgfplotsset{compat=1.18}
+\definecolor{cblue}{HTML}{4C78A8}
+\definecolor{cteal}{HTML}{579D99}
+\definecolor{cgreen}{HTML}{46933F}
+\definecolor{corange}{HTML}{D6892C}
+\definecolor{cpurple}{HTML}{98668D}
+\definecolor{cbrown}{HTML}{926952}
+\newcommand{\gridtable}[1]{../Fig3_grid_update/plotting_tables/fig3_K#1_summary.csv}
+\pgfplotsset{
+  selected field/.style={x filter/.expression={abs(\thisrow{E}-#1)<1e-6 ? x : nan}},
+  curve/.style={thick,mark size=1.7pt},
+  field curve/.style={curve,forget plot},
+  rate error/.style={error bars/y dir=both,error bars/y explicit,error bars/error mark options={mark size=1.2pt}}
+}
+\newcommand{\ratepanel}[3]{%
+  \nextgroupplot[title={$\boldsymbol{#1\times #1}$},ymin=0,ymax=0.85,
+    ytick={0,.2,.4,.6,.8},ylabel={#3},xticklabels=\empty]
+  \addplot[curve,cblue,mark=*,selected field=0.1,rate error]
+    table[col sep=comma,x=N,y=true_rate,y error=true_rate_sd]{\gridtable{#1}};
+  \addplot[curve,cteal,mark=square*,dashed,selected field=0.1,rate error]
+    table[col sep=comma,x=N,y=estimator_rate,y error=estimator_rate_sd]{\gridtable{#1}};
+  \node[anchor=north west,inner sep=2.5pt] at (rel axis cs:0,1) {#2};
+}
+\newcommand{\fieldseries}[3]{%
+  \addplot[field curve,selected field=#2,#3]
+    table[col sep=comma,x=N,y=quality_factor_Q]{\gridtable{#1}};
+}
+\newcommand{\qualitypanel}[3]{%
+  \nextgroupplot[ymin=0,ymax=.82,ytick={0,.2,.4,.6,.8},ylabel={#3},xlabel={$N$}]
+  \addplot[black!60,densely dotted,thick] coordinates {(-3,0.666666667)(104,0.666666667)};
+  \fieldseries{#1}{0.1}{cblue,mark=*}
+  \fieldseries{#1}{0.2}{cteal,mark=square*,dashed}
+  \fieldseries{#1}{0.4}{cgreen,mark=triangle*,dashdotted}
+  \fieldseries{#1}{0.5}{corange,mark=diamond*,densely dotted}
+  \fieldseries{#1}{0.8}{cpurple,mark=triangle*,mark options={rotate=180},dashed}
+  \fieldseries{#1}{1.0}{cbrown,mark=pentagon*,dashdotted}
+  \node[anchor=north west,inner sep=2.5pt] at (rel axis cs:0,1) {#2};
+}
+\newcommand{\legenditem}[2]{%
+  \tikz[baseline=-.5ex]{\draw[#1,thick] (0,0)--(.33,0);
+    \path[#1] plot[only marks,mark size=1.5pt] coordinates {(.165,0)};}~#2%
+}
+\begin{document}
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=3 by 2,y descriptions at=edge left,
+    horizontal sep=0.4cm,vertical sep=0.28cm},
+  width=4.15cm,height=3.25cm,scale only axis,
+  xmin=-3,xmax=104,xtick={0,20,40,60,80,100},
+  tick align=inside,major grid style={black!13},grid=major,
+  tick label style={font=\small},enlarge x limits=false,filter discard warning=false,
+  label style={font=\normalsize},title style={font=\normalsize}]
+  \ratepanel{5}{(a)}{Entropy production rate}
+  \ratepanel{10}{(b)}{}
+  \ratepanel{160}{(c)}{}
+  \qualitypanel{5}{(d)}{$\mathcal Q$}
+  \qualitypanel{10}{(e)}{}
+  \qualitypanel{160}{(f)}{}
+\end{groupplot}
+\node[anchor=south,font=\small] at ([yshift=19pt]group c2r1.north) {%
+  \legenditem{cblue,mark=*}{$\sigma_{[0,\mathcal T]}/\mathcal T$}\qquad
+  \legenditem{cteal,mark=square*,dashed}{$\sigma^{\rm est,*}_{[0,\mathcal T]}/\mathcal T$}\qquad
+  $E=0.1$};
+\node[anchor=north,font=\small] at ([yshift=-31pt]group c2r2.south) {%
+  $\smash{E=}$\enspace
+  \legenditem{cblue,mark=*}{$0.1$}\quad
+  \legenditem{cteal,mark=square*,dashed}{$0.2$}\quad
+  \legenditem{cgreen,mark=triangle*,dashdotted}{$0.4$}\quad
+  \legenditem{corange,mark=diamond*,densely dotted}{$0.5$}\quad
+  \legenditem{cpurple,mark=triangle*,mark options={rotate=180},dashed}{$0.8$}\quad
+  \legenditem{cbrown,mark=pentagon*,dashdotted}{$1.0$}\qquad
+  \legenditem{black!60,densely dotted}{$2/3$}};
+\end{tikzpicture}
+\end{document}
