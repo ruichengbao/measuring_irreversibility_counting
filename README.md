@@ -1,8 +1,10 @@
 # Estimating Irreversibility via Cross-Correlations and Random Coarse-Graining
 
-This repository contains the simulation and analysis code for the revised manuscript. The numerical examples ask how much entropy production (EP) can be inferred from the asymmetry of two-time cross-correlations. In the four-state model a noisy measurement returns one label. In the particle model each observation returns the number of particles in every spatial bin.
+This repository contains the simulation and analysis code for the revised manuscript. The numerical examples ask how much entropy production (EP) can be inferred from the asymmetry of two-time cross-correlations. In the four-state model a noisy measurement returns one label. In the particle model each frame records the particle counts in a grid fixed in the laboratory frame.
 
-**[Many-Body Simulation Methods (PDF)](MANY_BODY_SIMULATION_METHODS.pdf)** explains how Fig. 3 is computed from two-time correlations of box counts. The simulation averages over collective translation to reduce sampling error in those correlations. The note gives the integration scheme, the fitted correlation weights, the score evaluated on each independent realization, and the numerical checks. [LaTeX source](numerics/Fig3_corrected/MANY_BODY_SIMULATION_METHODS.tex)
+**What does the relative-coordinate simulation calculate?** The two-time correlation in Fig. 3 and Sec. IV of the Supplemental Material is the average product of the normalized count in an initial box and the normalized count in a final box. The simulation evaluates this product for the same boxes, drive phase and time lag. It samples relative particle configurations and averages analytically over the position and displacement of the center of friction. This reduces finite-sample error in the correlation used for the entropy-production bound. An experiment can estimate that correlation directly by averaging the products from repeated pairs of frames.
+
+The [Many-Body Simulation Methods (PDF)](MANY_BODY_SIMULATION_METHODS.pdf) derives this equivalence and gives the integration scheme, the independent evaluation of the bound, and the numerical checks. [LaTeX source](numerics/Fig3_corrected/MANY_BODY_SIMULATION_METHODS.tex)
 
 **To reproduce the current Fig. 3**, install the Python dependencies and run the command below from the repository root. The script reads the supplied plotting tables and writes a vector PDF and a PNG in `numerics/Fig3_interacting_inset/`.
 

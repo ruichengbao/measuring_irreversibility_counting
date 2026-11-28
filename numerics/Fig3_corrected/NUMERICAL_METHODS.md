@@ -35,6 +35,8 @@ The SM specifies the spring branch below its cutoff. We take the spring force to
 
 ## Exact collective motion and relative-coordinate simulation
 
+The observation grid stays fixed in the laboratory frame. As in Fig. 3 and Sec. IV of the Supplemental Material, each correlation is the average of a product of two normalized box counts. The coordinate change lets us integrate over collective translation in that average and reduce its sampling error.
+
 Define $\Gamma=\sum_a\mu_a^{-1}$, $Q_{\mathrm{ch}}=\sum_a q_a$, the unwrapped center of friction $\mathbf X=\Gamma^{-1}\sum_a\mathbf x_a/\mu_a$, and $\mathbf y_a=\mathbf x_a-\mathbf X$. Translation invariance gives the exact independent collective process
 
 $$

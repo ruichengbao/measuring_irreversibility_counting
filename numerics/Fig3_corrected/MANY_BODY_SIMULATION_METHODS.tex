@@ -26,19 +26,20 @@ Technical companion to Fig.~3 and Supplemental Fig.~S3 of
 \emph{Estimating Irreversibility via Cross-Correlations and Random Coarse-Graining}.
 
 \section{Measurement and model}
-Each frame records the number $n_m(t)$ of particles in every box $m$ of a $K\times K$ grid.
-For $N$ particles the normalized counts are $\rho_m(t)=n_m(t)/N$.
-Two frames separated by time $\tau$ give the cross-correlation
+The measurement in Fig.~3 and Sec.~IV of the Supplemental Material uses a $K\times K$ grid
+fixed in the laboratory frame. Each frame records the count $n_m(t)$ in every box $m$.
+For $N$ particles the normalized count is $\rho_m(t)=n_m(t)/N$. Two frames at times
+$t_0$ and $t_0+\tau$ give the product whose average defines the cross-correlation
 \begin{equation}
  C^{t_0,\tau}_{nm}=\big\langle\rho_n(t_0)\rho_m(t_0+\tau)\big\rangle .
  \label{eq:C}
 \end{equation}
-Here $n$ indexes the initial box and $m$ the final box. Repeating the two observations
-at the same phase $t_0$ of the drive estimates their ensemble average. Summing over all ordered
-box pairs gives $\sum_{n,m}C^{t_0,\tau}_{nm}=1$. Particle identities and trajectories between frames
-are unnecessary for this measurement. The simulation evaluates this average by integrating
-over the model's known translation statistics. Particle-resolved work provides a separate reference
-for the true entropy production (EP).
+Here $n$ indexes the initial box and $m$ the final box, with $\sum_{n,m}C^{t_0,\tau}_{nm}=1$.
+Experimentally, one averages these products over repeated pairs of frames at the same drive phase
+and lag. The relative-coordinate simulation computes the same average by sampling relative
+configurations and integrating analytically over the position and displacement of the center of
+friction. This removes one source of sampling noise in the correlation entering the bound.
+Particle-resolved work supplies a separate reference for the true entropy production (EP).
 
 The model consists of overdamped Brownian particles on a periodic square of side $L=5$.
 The unwrapped particle positions $\mathbf x_a$ obey
@@ -153,8 +154,9 @@ $\bar\Delta\ex=(\ch E\tau/\Gamma)\ex$ and variance $s^2=2\tau/\Gamma$ per axis.
 Write $G_\tau$ for this two-dimensional density, $\mathbf y(t)$ for the collection
 of all relative coordinates, and
 $\rho_m(\mathbf R,\mathbf y)=N^{-1}\sum_a\mathbf 1_m(\mathbf R+\mathbf y_a)$,
-where $\mathbf 1_m$ is the periodic box indicator. The conditional average of the same two
-counts in Eq.~\eqref{eq:C} is
+where $\mathbf 1_m$ is the periodic indicator of the original, fixed box $m$. Thus each count uses the laboratory position
+$\mathbf R+\mathbf y_a$ of the particle. Conditioning the product of counts in Eq.~\eqref{eq:C}
+on the relative configurations at the two observation times gives
 \begin{equation}
  C^{t_0,\tau}_{nm} =
  \left\langle \frac{1}{L^2}\int_\Omega\dd^2 R
