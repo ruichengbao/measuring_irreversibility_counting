@@ -2,6 +2,8 @@
 
 This repository contains the simulation and analysis code for the revised manuscript. The numerical examples ask how much entropy production (EP) can be inferred from the asymmetry of two-time cross-correlations. In the four-state model a noisy measurement returns one label. In the particle model each observation returns the number of particles in every spatial bin.
 
+**[Many-Body Simulation Methods (PDF)](MANY_BODY_SIMULATION_METHODS.pdf)** explains how Fig. 3 is computed from two-time correlations of box counts. The simulation averages over collective translation to reduce sampling error in those correlations. The note gives the integration scheme, the evaluation on independent realizations, and the numerical checks, including Eqs. (S41)–(S43) and (S47)–(S48) cited in the Supplemental Material. [LaTeX source](numerics/Fig3_corrected/MANY_BODY_SIMULATION_METHODS.tex)
+
 **To reproduce the current Fig. 3**, install the Python dependencies and run the command below from the repository root. The script reads the supplied plotting tables and writes a vector PDF and a PNG in `numerics/Fig3_interacting_inset/`.
 
 ~~~sh
