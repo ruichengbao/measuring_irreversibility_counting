@@ -73,7 +73,7 @@ $N=1,2,5,10,20,50,60,80,100$ and $E=0.1,0.2,0.4,0.5,0.8,1.0$. Five realizations 
 size retain the same particle assignments across fields. The
 \source{numerics/Fig3_corrected/simulation/jobs_manifest_driven_final.json}{production manifest}
 records thermal and disorder seeds and run lengths for the 240 interacting runs.
-The 30 one-particle cases use the exact propagator. Equation numbers prefixed by S identify formulas moved from the Supplemental Material.
+The 30 one-particle cases use the exact propagator.
 
 \newpage
 \section{Relative-coordinate simulation and the true EP}
@@ -85,10 +85,10 @@ Pair forces cancel in the weighted sum of Eq.~\eqref{eq:model}. With
 $\mathbf F_a^{\rm int}=-\nabla_a U$ and $\tilde q_a=q_a-\ch/(\mu_a\Gamma)$,
 \begin{align}
  \dd\mathbf R&=\frac{\ch}{\Gamma}E(t)\ex\,\dd t+\sqrt{\frac{2}{\Gamma}}\,\dd\mathbf W_R ,
- \tag{S41}\label{eq:cm}\\
+ \label{eq:cm}\\
  \dd\mathbf y_a&=\mu_a\big[\mathbf F_a^{\rm int}+\tilde q_a E(t)\ex\big]\,\dd t
  +\sqrt{2\mu_a}\,\dd\mathbf W_a-\frac1{\Gamma}\sum_b\sqrt{2/\mu_b}\,\dd\mathbf W_b .
- \tag{S42}\label{eq:rel}
+ \label{eq:rel}
 \end{align}
 Here $\mathbf W_R=\Gamma^{-1/2}\sum_b\mu_b^{-1/2}\mathbf W_b$ has zero covariance with the
 Gaussian noise in Eq.~\eqref{eq:rel}, so the collective increments are independent of the
@@ -103,7 +103,7 @@ $s_a=\sqrt{2\mu_a\Delta t}$ and $\mathbf d_a=\mu_a\Delta t(\mathbf F_a^{\rm int}
 Propose
 \begin{equation}
  \boldsymbol\delta=\frac{\mathbf d_a}{1+|\mathbf d_a|/(2s_a)}+s_a\boldsymbol\eta ,
- \qquad \boldsymbol\eta\sim{\cal N}(\mathbf 0,\mathbf I_2),\tag{S43}
+ \qquad \boldsymbol\eta\sim{\cal N}(\mathbf 0,\mathbf I_2),
 \end{equation}
 where $\mathbf I_2$ is the two-dimensional identity matrix. Let $g_{\rm f}$ be this Gaussian
 proposal density at $\boldsymbol\delta$ and $g_{\rm r}$ the Gaussian density at
@@ -161,7 +161,7 @@ counts in Eq.~\eqref{eq:C} is
  \int_{\mathbb R^2}\dd^2\Delta\,G_\tau(\boldsymbol\Delta)
  \rho_n(\mathbf R,\mathbf y(t_0))\,
  \rho_m(\mathbf R+\boldsymbol\Delta,\mathbf y(t_0+\tau))\right\rangle_{\mathbf y}.
- \tag{S47}\label{eq:conditional}
+ \label{eq:conditional}
 \end{equation}
 Only the average over relative configurations is sampled. The analysis uses the last 160 production
 periods, recording at both field extrema (320 frames), with all time origins that have an endpoint
@@ -206,7 +206,7 @@ $D(C\Vert C^{\mathsf T})=\sum_{n,m}C_{nm}\ln(C_{nm}/C_{mn})$.
 Selecting the largest value after fitting a noisy matrix on the same trajectory can
 bias the estimate upward. For a real matrix $f$ the variational identity reads
 \begin{equation}
- D(C\Vert C^{\mathsf T})=\max_f S(C,f),\qquad S(C,f)=\sum_{n,m}\big[C_{nm}f_{nm}-C_{mn}(e^{f_{nm}}-1)\big].\tag{S48}
+ D(C\Vert C^{\mathsf T})=\max_f S(C,f),\qquad S(C,f)=\sum_{n,m}\big[C_{nm}f_{nm}-C_{mn}(e^{f_{nm}}-1)\big].
 \end{equation}
 Each term is concave in $f_{nm}$ and attains its maximum at $\ln(C_{nm}/C_{mn})$ for
 positive entries. At the maximum the exponential terms cancel because both matrices sum to one.
@@ -226,13 +226,18 @@ Try $c=8,12,16,20,24,28,32,40,50,64,80,100,150$.
 \item Score each candidate on the fourth training realization using $S(C,f)/\ell$,
 with $f_{nm}=f_{m-n}$. Select the lag, phase and cap that maximize the average score
 over all four inner holdouts. Refit $f$ using all four training realizations.
-\item Evaluate $S(C^{\rm test},f)/\ell$ on the fifth realization using its own correlation
-matrix $C^{\rm test}$. Repeat until each realization has provided the test data.
+\item With the fitted weights and window fixed, use the fifth realization's correlations
+$C^{\rm test}$ to calculate the following estimate of EP per period.
+\begin{equation}
+ \frac{S(C^{\rm test},f)}{\ell}=\frac{1}{\ell}\sum_{n,m}
+ \left[C^{\rm test}_{nm} f_{nm}-C^{\rm test}_{mn}\big(e^{f_{nm}}-1\big)\right].
+ \label{eq:test-score}
+\end{equation}
+Repeat until every realization has supplied the test data.
 \end{enumerate}
-The population inequality carries over in expectation to an independently estimated linear
-score, subject to time-step and quadrature error. An individual finite trajectory can fluctuate
-on either side of its population value. The single-particle code uses its deterministic
-probabilities for every lag (log-ratio cap 20).
+Independent evaluation preserves the bound in expectation, up to time-step and quadrature
+error. Individual scores fluctuate about their population values. For $N=1$ the code
+uses deterministic probabilities at every lag (log-ratio cap 20).
 
 \textbf{Figure values.}
 The plotted rate is the mean of the five evaluated per-period scores divided by $\Tr$.

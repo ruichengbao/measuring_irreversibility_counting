@@ -2,7 +2,7 @@
 
 This repository contains the simulation and analysis code for the revised manuscript. The numerical examples ask how much entropy production (EP) can be inferred from the asymmetry of two-time cross-correlations. In the four-state model a noisy measurement returns one label. In the particle model each observation returns the number of particles in every spatial bin.
 
-**[Many-Body Simulation Methods (PDF)](MANY_BODY_SIMULATION_METHODS.pdf)** explains how Fig. 3 is computed from two-time correlations of box counts. The simulation averages over collective translation to reduce sampling error in those correlations. The note gives the integration scheme, the evaluation on independent realizations, and the numerical checks, including Eqs. (S41)–(S43) and (S47)–(S48) cited in the Supplemental Material. [LaTeX source](numerics/Fig3_corrected/MANY_BODY_SIMULATION_METHODS.tex)
+**[Many-Body Simulation Methods (PDF)](MANY_BODY_SIMULATION_METHODS.pdf)** explains how Fig. 3 is computed from two-time correlations of box counts. The simulation averages over collective translation to reduce sampling error in those correlations. The note gives the integration scheme, the fitted correlation weights, the score evaluated on each independent realization, and the numerical checks. [LaTeX source](numerics/Fig3_corrected/MANY_BODY_SIMULATION_METHODS.tex)
 
 **To reproduce the current Fig. 3**, install the Python dependencies and run the command below from the repository root. The script reads the supplied plotting tables and writes a vector PDF and a PNG in `numerics/Fig3_interacting_inset/`.
 
@@ -72,6 +72,8 @@ To check aggregation without simulating, use `numerics/Reverse_protocol_lag_stud
 ### Steady driving
 
 The steady calculation uses five field amplitudes, including the same five particle realizations per condition as in the periodic study. The left panel of Fig. S4 uses the steady simulation below. Its right panel reads the periodic 20 × 20 table.
+
+Each steady run discards the first 10 time units. The work average uses 160–10,000 production time units. Relative configurations are recorded every 0.05 time units over the final 160. To compute the second moment of the counting current at each lag, the analysis averages over 256 pairs of relative configurations, uses 2,048 scrambled Sobol points per pair, and averages each sample with its transverse reflection. The other four realizations select the lag for each bound and fit the weights for the density bound. Evaluation uses the fifth realization. For one particle the exact propagator gives both bounds directly. [Simulation parameters](numerics/FigS3_update/engine/STEADY_ENGINE.md) · [Steady-state analysis](numerics/FigS3_update/analysis/analyze_steady.py) · [Current-moment calculation](numerics/FigS3_update/analysis/moment_kernel.py)
 
 ~~~sh
 (
